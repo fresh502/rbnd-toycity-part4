@@ -17,6 +17,11 @@ class Product < Udacidata
     @price = opts[:price]
   end
 
+  def self.create(opts={})
+    opts[:allow_duplicates] = false
+    super
+  end
+
   private
 
     # Reads the last line of the data file, and gets the id if one exists

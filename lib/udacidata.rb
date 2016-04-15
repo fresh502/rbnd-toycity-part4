@@ -23,12 +23,13 @@ class Udacidata
 	end
 
 	def self.all
-		columns = CSV.read(@@data_path).first.map { |column| column.to_sym }
-		CSV.read(@@data_path).drop(1).map { |row| self.new(columns.zip(row).to_h) }
+		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
+		CSV.read(@@data_path).drop(1).map { |data| self.new(columns.zip(data).to_h) }
 	end
 
-	# def self.first
-	# 	first_data = CSV.read(@@data_path)[1]
-	# 	self.new(id:
-	# end
+	def self.first(range=1)
+		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
+		datas = CSV.read(@@data_path).drop(1).first(range).map { |data| self.new(columns.zip(data).to_h) }
+		datas.length == 1 ? datas[0] : datas
+	end
 end

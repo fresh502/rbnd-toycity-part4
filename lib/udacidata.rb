@@ -3,11 +3,11 @@ require_relative 'errors'
 require 'csv'
 
 class Udacidata
+	@@data_path = File.dirname(__FILE__) + "/../data/data.csv"
+
 	def self.create(opts={})
 		data = self.new(opts)
-		@data_path = File.dirname(__FILE__) + "/../data/data.csv"
-
-		CSV.open(@data_path, "a+") do |csv|
+		CSV.open(@@data_path, "a+") do |csv|
 			duplication = false
 			unless opts[:allow_duplicates]
 				csv.each do |row|
@@ -21,4 +21,14 @@ class Udacidata
 		end
 		return data
 	end
+
+	def self.all
+		columns = CSV.read(@@data_path).first.map { |column| column.to_sym }
+		CSV.read(@@data_path).drop(1).map { |row| self.new(columns.zip(row).to_h) }
+	end
+
+	# def self.first
+	# 	first_data = CSV.read(@@data_path)[1]
+	# 	self.new(id:
+	# end
 end

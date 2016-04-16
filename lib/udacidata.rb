@@ -39,5 +39,9 @@ class Udacidata
 		datas.length == 1 ? datas[0] : datas
 	end
 
-
+	def self.find(id)
+		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
+		data = CSV.read(@@data_path).drop(1).select { |data| data.first.to_i == id }.first
+		self.new(columns.zip(data).to_h)
+	end
 end

@@ -32,4 +32,12 @@ class Udacidata
 		datas = CSV.read(@@data_path).drop(1).first(range).map { |data| self.new(columns.zip(data).to_h) }
 		datas.length == 1 ? datas[0] : datas
 	end
+
+	def self.last(range=1)
+		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
+		datas = CSV.read(@@data_path).drop(1).last(range).map { |data| self.new(columns.zip(data).to_h) }
+		datas.length == 1 ? datas[0] : datas
+	end
+
+
 end

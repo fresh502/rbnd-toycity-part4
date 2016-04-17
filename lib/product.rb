@@ -1,7 +1,8 @@
 require_relative 'udacidata'
 
 class Product < Udacidata
-  attr_reader :id, :price, :brand, :name
+  @@data_path = File.dirname(__FILE__) + "/../data/data.csv"
+  attr_reader :id, :price, :brand, :name, :data_path
 
   def initialize(opts={})
 
@@ -20,6 +21,10 @@ class Product < Udacidata
   def self.create(opts={})
     opts[:allow_duplicates] = false
     super
+  end
+
+  def self.data_path
+    @@data_path
   end
 
   private

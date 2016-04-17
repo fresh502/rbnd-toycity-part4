@@ -40,6 +40,7 @@ class Udacidata
 	def self.find(id)
 		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
 		data = CSV.read(data_path, headers: true).select { |data| data["id"].to_i == id }.first
+		raise ProductNotFoundError if data == nil
 		self.new(columns.zip(data.fields).to_h)
 	end
 

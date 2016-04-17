@@ -1,1 +1,4 @@
-# Your custom error classes will be placed here
+module Error
+	class ProductNotFoundError < StandardError
+	end
+end

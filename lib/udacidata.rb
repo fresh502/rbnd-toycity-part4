@@ -41,8 +41,8 @@ class Udacidata
 
 	def self.find(id)
 		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
-		data = CSV.read(@@data_path).select { |data| data.first.to_i == id }.first
-		self.new(columns.zip(data).to_h)
+		data = CSV.read(@@data_path, headers: true).select { |data| data["id"].to_i == id }.first
+		self.new(columns.zip(data.fields).to_h)
 	end
 
 	def self.destroy(id)
@@ -54,5 +54,32 @@ class Udacidata
 			end
 		end
 		return data
+	end
+
+	def self.method_missing(method_name, argument)
+		if method_name.to_s.start_with? "find_by_"
+			attributes = self.new.instance_variables.map { |variable| variable.to_s.delete!('@').to_sym }
+			create_finder_methods(attributes)
+			send(method_name, argument)
+		else
+			super
+		end
+	end
+
+	def self.where(options={})
+		columns = self.new.instance_variables.map { |column| column.to_s.delete!('@').to_sym }
+		datas = []
+		if (options.keys - columns).empty?
+			datas = CSV.read(@@data_path, headers: true).select do |data|
+				check_value = true
+				options.each do |key, value|
+					check_value = false unless data[key.to_s] == value
+				end
+				check_value
+			end
+		else
+			# handle exception
+		end
+		datas.map { |data| self.new(columns.zip(data.fields).to_h) }
 	end
 end

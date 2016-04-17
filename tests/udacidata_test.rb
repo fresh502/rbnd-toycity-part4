@@ -7,7 +7,7 @@ class TestUdacidata < MiniTest::Test
   def setup
     @data_path = File.dirname(__FILE__) + "/../data/data.csv"
     CSV.open(@data_path, "wb") do |csv|
-      csv << ["id", "brand", "product", "price"]
+      csv << ["id", "brand", "name", "price"]
     end
     db_seed
   end
@@ -121,27 +121,27 @@ class TestUdacidata < MiniTest::Test
     product = Product.find_by_brand("OritToys")
     assert_equal("OritToys", product.brand)
   end
-  #
-  # def test_find_by_name_method_returns_first_product_with_given_name
-  #   Product.create(brand: "OritToys", name: "Nyan Cat", price: 3.00)
-  #   product = Product.find_by_name("Nyan Cat")
-  #   assert_equal("Nyan Cat", product.name)
-  # end
-  #
-  # def test_where_method_returns_array_type
-  #   Product.create(brand: "Lego", name: "Sticky Notes", price: 34.00)
-  #   array_of_products = Product.where(brand: "Lego")
-  #   assert_kind_of(Array, array_of_products)
-  # end
-  #
-  # def test_where_method_returns_correct_products
-  #   Product.create(brand: "Lego", name: "Sticky Notes", price: 34.00)
-  #   array_of_products = Product.where(brand: "Lego")
-  #   array_of_products.each do |product|
-  #     assert_equal("Lego", product.brand)
-  #   end
-  # end
-  #
+
+  def test_find_by_name_method_returns_first_product_with_given_name
+    Product.create(brand: "OritToys", name: "Nyan Cat", price: 3.00)
+    product = Product.find_by_name("Nyan Cat")
+    assert_equal("Nyan Cat", product.name)
+  end
+
+  def test_where_method_returns_array_type
+    Product.create(brand: "Lego", name: "Sticky Notes", price: 34.00)
+    array_of_products = Product.where(brand: "Lego")
+    assert_kind_of(Array, array_of_products)
+  end
+
+  def test_where_method_returns_correct_products
+    Product.create(brand: "Lego", name: "Sticky Notes", price: 34.00)
+    array_of_products = Product.where(brand: "Lego")
+    array_of_products.each do |product|
+      assert_equal("Lego", product.brand)
+    end
+  end
+
   # def test_update_info_of_existing_product
   #   product = Product.find(4).update(price: 100000.00, brand: "Lolerskater")
   #   actual = [product.price.to_f, product.brand]
